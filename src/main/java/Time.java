@@ -11,6 +11,12 @@ public class Time {
         am = "am".equals(ampm.toLowerCase());
     }
 
+    public Time(int hour, int minute, boolean am) {
+        this.hour = hour;
+        this.minute = minute;
+        this.am = am;
+    }
+
     @Override
     public String toString() {
         if(am) {

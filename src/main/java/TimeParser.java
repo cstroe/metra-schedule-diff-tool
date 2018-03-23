@@ -36,4 +36,9 @@ public class TimeParser {
 
         return new TimeParserResult(new TimeParserException("No match."));
     }
+
+    public TimeParserResult parse(String previousInput, String currentInput) {
+
+        return new TimeParserResult(new TimeParserException("No match."));
+    }
 }
