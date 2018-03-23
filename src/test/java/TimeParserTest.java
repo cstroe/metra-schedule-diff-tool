@@ -33,5 +33,6 @@ public class TimeParserTest {
 
         assertResult("9:10 AM", Time.of("9:01 AM"), "10");
         assertResult("10:10 AM", Time.of("9:40 AM"), "10");
+        assertResult("1:10 PM", Time.of("12:40 PM"), "10");
     }
 }

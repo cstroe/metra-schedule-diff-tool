@@ -52,7 +52,11 @@ public class TimeParser {
 
             Time time;
             if(newMinute <= previousTime.minute) {
-                time = Time.of(previousTime.hour + 1, newMinute, previousTime.am);
+                int nextHour = previousTime.hour + 1;
+                if(nextHour > 12) {
+                    nextHour = 1;
+                }
+                time = Time.of(nextHour, newMinute, previousTime.am);
             } else {
                 time = Time.of(previousTime.hour, newMinute, previousTime.am);
             }
