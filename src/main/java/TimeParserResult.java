@@ -1,5 +1,5 @@
-public class TimeParserResult extends Result<String, TimeParserException> {
-    public TimeParserResult(String value) {
+public class TimeParserResult extends Result<Time, TimeParserException> {
+    public TimeParserResult(Time value) {
         super(value);
     }
 

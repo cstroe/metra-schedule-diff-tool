@@ -7,13 +7,13 @@ public class TimeParserTest {
     private void assertResult(String expected, String input) {
         TimeParserResult result = new TimeParser().parse(input);
         assertTrue(result.hasValue());
-        assertEquals(expected, result.getValue());
+        assertEquals(expected, result.getValue().toString());
     }
 
-    private void assertResult(String expected, String previousInput, String currentInput) {
+    private void assertResult(String expected, Time previousInput, String currentInput) {
         TimeParserResult result = new TimeParser().parse(previousInput, currentInput);
         assertTrue(result.hasValue());
-        assertEquals(expected, result.getValue());
+        assertEquals(expected, result.getValue().toString());
     }
 
     @Test
@@ -26,9 +26,11 @@ public class TimeParserTest {
 
     @Test
     public void parse002() {
-        assertResult("9:01 AM", "9:01 AM", "901");
-        assertResult("9:01 PM", "901p");
-        assertResult("10:01 AM", "1001");
-        assertResult("10:01 PM", "1001p");
+        assertResult("9:01 AM", Time.of("9:01 AM"), "901");
+        assertResult("9:01 PM", Time.of("9:01 AM"), "901p");
+        assertResult("10:01 AM", Time.of("9:01 AM"), "1001");
+        assertResult("10:01 PM", Time.of("9:01 AM"), "1001p");
+
+        assertResult("9:10 AM", Time.of("9:01 AM"), "10");
     }
 }
