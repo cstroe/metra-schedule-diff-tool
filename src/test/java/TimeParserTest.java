@@ -14,5 +14,7 @@ public class TimeParserTest {
     public void parse001() {
         assertResult("9:01 AM", "901");
         assertResult("9:01 PM", "901p");
+        assertResult("10:01 AM", "1001");
+        assertResult("10:01 PM", "1001p");
     }
 }

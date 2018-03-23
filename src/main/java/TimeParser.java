@@ -2,8 +2,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TimeParser {
-    private static final Pattern simplePattern = Pattern.compile("^([0-9])([0-9][0-9])$");
-    private static final Pattern pmPattern = Pattern.compile("^([0-9])([0-9][0-9])p$");
+    private static final Pattern simplePattern = Pattern.compile("^([0-9]?[0-9])([0-9][0-9])$");
+    private static final Pattern pmPattern = Pattern.compile("^([0-9]?[0-9])([0-9][0-9])p$");
 
     private String match(String input) {
         Matcher matcher = simplePattern.matcher(input);
@@ -34,6 +34,6 @@ public class TimeParser {
             return new TimeParserResult(match2);
         }
 
-        return new TimeParserResult("");
+        return new TimeParserResult(new TimeParserException("No match."));
     }
 }
