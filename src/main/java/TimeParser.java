@@ -48,7 +48,14 @@ public class TimeParser {
 
         Matcher minute = minutePattern.matcher(currentInput);
         if(minute.matches()) {
-            Time time = Time.of(previousTime.hour, Integer.parseInt(minute.group(1)), previousTime.am);
+            int newMinute = Integer.parseInt(minute.group(1));
+
+            Time time;
+            if(newMinute <= previousTime.minute) {
+                time = Time.of(previousTime.hour + 1, newMinute, previousTime.am);
+            } else {
+                time = Time.of(previousTime.hour, newMinute, previousTime.am);
+            }
             return new TimeParserResult(time);
         }
         return new TimeParserResult(new TimeParserException("No match."));
