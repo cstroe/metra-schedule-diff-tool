@@ -1,0 +1,27 @@
+id,station,zone
+1,"Chicago (Union Station)",A
+2,"Halsted St.",A
+3,"Western Ave.",A
+4,"Cicero",B
+5,"LaVergne",B
+6,"Berwyn",B
+7,"Harlem Ave.",B
+8,"Riverside",C
+9,"Hollywood (Zoo Stop)",C
+10,"Brookfield",C
+11,"Congress Park",C
+12,"LaGrange Rd.",C
+13,"LaGrange, Stone Av",C
+14,"Western Springs",D
+15,"Highlands",D
+16,"Hinsdale",D
+17,"West Hinsdale",D
+18,"Clarendon Hills",D
+19,"Westmont",D
+20,"Fairview Ave.",E
+21,"Downers Grv., Main",E
+22,"Belmont",E
+23,"Lisle",E
+24,"Naperville",F
+25,"Route 59",G
+26,"Aurora",H

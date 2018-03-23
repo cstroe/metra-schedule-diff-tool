@@ -1,0 +1,18 @@
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public class TimeParserTest {
+    private void assertResult(String expected, String input) {
+        TimeParserResult result = new TimeParser().parse(input);
+        assertTrue(result.hasValue());
+        assertEquals(expected, result.getValue());
+    }
+
+    @Test
+    public void parse001() {
+        assertResult("9:01 AM", "901");
+        assertResult("9:01 PM", "901p");
+    }
+}
