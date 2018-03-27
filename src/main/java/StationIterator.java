@@ -24,4 +24,13 @@ public class StationIterator implements Iterator<Station> {
     public void skipToLast() {
         currentIndex = stations.size() - 1;
     }
+
+    public void goBackTo(int stationId) {
+        while(currentIndex > 0) {
+            if (stations.get(currentIndex).id == stationId) {
+                return;
+            }
+            currentIndex--;
+        }
+    }
 }

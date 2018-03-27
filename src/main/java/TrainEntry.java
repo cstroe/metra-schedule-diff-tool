@@ -4,14 +4,8 @@ import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.csv.QuoteMode;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 import static java.lang.String.format;
 
@@ -19,14 +13,19 @@ public class TrainEntry {
     private static Scanner input = new Scanner(System.in).useDelimiter("\n");
 
     public static void main(String[] args) throws IOException {
+        String line = select("Please select your Metra line", getSubDirectories("schedules"));
+        System.out.println("Selected Metra line: " + line);
+        String schedule = select("Please select a schedule to edit", getSubDirectories("schedules" + File.separator + line));
+        System.out.println("Editing the following schedule: " + schedule);
         while(true) {
+            System.out.println(format("Line: %s, Schedule: %s", line, schedule));
             System.out.print("Enter a train number: ");
-            Optional<Integer> trainNumberOpt = getTrainNumber();
+            Optional<Integer> trainNumberOpt = readInteger();
             if (trainNumberOpt.isPresent()) {
                 Integer trainNumber = trainNumberOpt.get();
                 if (trainNumber % 2 == 0) {
-                    List<StationTime> times = getInboundTimes(trainNumber);
-                    saveTimes(trainNumber, times);
+                    List<StationTime> times = getInboundTimes(line, trainNumber);
+                    saveTimes(line, schedule, trainNumber, times);
                 } else {
                     getOutboundTimes(trainNumber);
                 }
@@ -36,7 +35,48 @@ public class TrainEntry {
         }
     }
 
-    private static Optional<Integer> getTrainNumber() {
+    private static String select(String prompt, List<String> options) {
+        for(int i = 0; i < options.size(); i++) {
+            String currentOption = options.get(i);
+            System.out.println(i + ": " + currentOption);
+        }
+        while(true) {
+            System.out.print(prompt + ": ");
+            Optional<Integer> valueOpt = readInteger();
+            if(valueOpt.isPresent()) {
+                Integer value = valueOpt.get();
+                if(value >= 0 && value < options.size()) {
+                    return options.get(value);
+                }
+            }
+        }
+    }
+
+    private static List<String> getSubDirectories(String parentDir) {
+        File schedulesDir = new File(parentDir);
+        if(!schedulesDir.isDirectory()) {
+            throw new IllegalArgumentException("Cannot find the schedules directory.");
+        }
+
+        String[] subDirectories = schedulesDir.list((dir, name) -> {
+            try {
+                File currentFile = new File(dir.getCanonicalPath() + File.separator + name);
+                return currentFile.isDirectory();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        });
+
+        return Arrays.asList(subDirectories);
+    }
+
+    private static List<String> getCurrentSchedules() {
+        //new File()
+        return null;
+    }
+
+    private static Optional<Integer> readInteger() {
         String trainNumberRaw = input.next();
         try {
             return Optional.of(Integer.parseInt(trainNumberRaw));
@@ -45,10 +85,10 @@ public class TrainEntry {
         }
     }
 
-    private static List<StationTime> getInboundTimes(Integer trainNumber) throws IOException {
+    private static List<StationTime> getInboundTimes(String line, Integer trainNumber) throws IOException {
         System.out.println("Reading times for inbound train number " + trainNumber);
 
-        Reader in = new FileReader("schedules/bnsf/bnsf-stations-inbound.csv");
+        Reader in = new FileReader(format("schedules/%s/bnsf-stations-inbound.csv", line));
         Iterable<CSVRecord> records = CSVFormat.RFC4180
                 .withFirstRecordAsHeader()
                 .parse(in);
@@ -57,7 +97,7 @@ public class TrainEntry {
             stations.add(Station.of(record.get(0), record.get(1)));
         }
 
-        List<StationTime> times = new ArrayList<>();
+        LinkedList<StationTime> times = new LinkedList<>();
         StationIterator iterator = new StationIterator(stations);
         StationTime previousStation = null;
         loop: while(iterator.hasNext()) {
@@ -71,6 +111,11 @@ public class TrainEntry {
                 case COMMAND_GOTO_END:
                     System.out.println("Goto end.");
                     iterator.skipToLast();
+                    continue loop;
+                case COMMAND_UNDO:
+                    StationTime time = times.removeLast();
+                    System.out.println("Undo: " + time);
+                    iterator.goBackTo(time.station.id);
                     continue loop;
                 case VALUE:
                     StationTime currentStationTime = input.getValue();
@@ -102,6 +147,10 @@ public class TrainEntry {
             return new Pair<>(Input.COMMAND_GOTO_END, null);
         }
 
+        if("u".equals(inputRaw)) {
+            return new Pair<>(Input.COMMAND_UNDO, null);
+        }
+
         TimeParserResult result;
         if(previousStation != null) {
             result = new TimeParser().parse(previousStation.time, inputRaw);
@@ -119,8 +168,8 @@ public class TrainEntry {
         System.out.println("Reading times for outbound train number " + trainNumber);
     }
 
-    private static void saveTimes(int trainNumber, List<StationTime> times) throws IOException {
-        String fileName = format("schedules/bnsf/2016-10-09/%d.csv", trainNumber);
+    private static void saveTimes(String line, String schedule, int trainNumber, List<StationTime> times) throws IOException {
+        String fileName = format("schedules/%s/%s/%d.csv", line, schedule, trainNumber);
         System.out.println(format("Saving file: %s", fileName));
         FileWriter writer = new FileWriter(fileName);
 
