@@ -1,3 +1,5 @@
+package com.github.cstroe.metraschedule.parser;
+
 import com.github.cstroe.metraschedule.Result;
 import com.github.cstroe.metraschedule.domain.Time;
 

@@ -1,3 +1,5 @@
+package com.github.cstroe.metraschedule.cli;
+
 public enum Input {
     VALUE,
     COMMAND_GOTO_END,

@@ -1,4 +1,6 @@
 import com.github.cstroe.metraschedule.domain.Time;
+import com.github.cstroe.metraschedule.parser.TimeParser;
+import com.github.cstroe.metraschedule.parser.TimeParserResult;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
