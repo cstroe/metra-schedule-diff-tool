@@ -1,3 +1,4 @@
+import com.github.cstroe.metraschedule.domain.Time;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

@@ -1,3 +1,5 @@
+import com.github.cstroe.metraschedule.domain.Time;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

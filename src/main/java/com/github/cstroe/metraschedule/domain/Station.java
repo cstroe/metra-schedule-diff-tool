@@ -1,3 +1,5 @@
+package com.github.cstroe.metraschedule.domain;
+
 public class Station {
     public final int id;
     public final String name;

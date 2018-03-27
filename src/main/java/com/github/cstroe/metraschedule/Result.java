@@ -1,3 +1,5 @@
+package com.github.cstroe.metraschedule;
+
 public class Result<V, E extends Exception> {
     private final V value;
     private final E error;

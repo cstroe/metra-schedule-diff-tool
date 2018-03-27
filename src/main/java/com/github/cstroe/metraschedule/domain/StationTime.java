@@ -1,3 +1,5 @@
+package com.github.cstroe.metraschedule.domain;
+
 public class StationTime {
     public final Station station;
     public final Time time;
