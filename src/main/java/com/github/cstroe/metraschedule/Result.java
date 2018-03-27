@@ -23,10 +23,16 @@ public class Result<V, E extends Exception> {
     }
 
     public V getValue() {
+        if(value == null) {
+            throw new RuntimeException("Cannot get value from an error result.");
+        }
         return value;
     }
 
     public E getError() {
+        if(error == null) {
+            throw new RuntimeException("Cannot get error from a value result.");
+        }
         return error;
     }
 }
