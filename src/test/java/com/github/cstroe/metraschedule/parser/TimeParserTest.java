@@ -1,6 +1,6 @@
+package com.github.cstroe.metraschedule.parser;
+
 import com.github.cstroe.metraschedule.domain.Time;
-import com.github.cstroe.metraschedule.parser.TimeParser;
-import com.github.cstroe.metraschedule.parser.TimeParserResult;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -37,5 +37,12 @@ public class TimeParserTest {
         assertResult("9:10 AM", Time.of("9:01 AM"), "10");
         assertResult("10:10 AM", Time.of("9:40 AM"), "10");
         assertResult("1:10 PM", Time.of("12:40 PM"), "10");
+    }
+
+    @Test
+    public void parse003() {
+        assertResult("9:01 AM", "\"9:01 AM\"");
+        assertResult("10:01 AM", "\"10:01 AM\"");
+        assertResult("12:59 AM", "\"12:59 AM\"");
     }
 }

@@ -6,7 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TimeParser {
-    private static final Pattern simplePattern = Pattern.compile("^(1?[0-2]|[1-9])([0-9][0-9])$");
+    private static final Pattern quotedFullPattern = Pattern.compile("^\"(1?[0-2]|[1-9]):([0-5][0-9]) (AM|PM)\"$");
+    private static final Pattern simplePattern = Pattern.compile("^(1?[0-2]|[1-9])([0-5][0-9])$");
     private static final Pattern pmPattern = Pattern.compile("^(1?[0-2]|[1-9])([0-9][0-9])p$");
 
     private static final Pattern minutePattern = Pattern.compile("^([1-5]?[0-9]|[0-9]$)");
@@ -29,7 +30,21 @@ public class TimeParser {
         }
     }
 
+    private Time matchQuotedFull(String input) {
+        Matcher matcher = quotedFullPattern.matcher(input);
+        if(matcher.find()) {
+            return Time.of(matcher.group(1), matcher.group(2), matcher.group(3));
+        } else {
+            return null;
+        }
+    }
+
     public TimeParserResult parse(String time) {
+        Time match1 = matchQuotedFull(time);
+        if(match1 != null) {
+            return new TimeParserResult(match1);
+        }
+
         Time match = match(time);
         if(match != null) {
             return new TimeParserResult(match);
