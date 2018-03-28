@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TimeParser {
-    private static final Pattern quotedFullPattern = Pattern.compile("^\"(1?[0-2]|[1-9]):([0-5][0-9]) (AM|PM)\"$");
+    private static final Pattern quotedFullPattern = Pattern.compile("^(1?[0-2]|[1-9]):([0-5][0-9]) (AM|PM)$");
     private static final Pattern simplePattern = Pattern.compile("^(1?[0-2]|[1-9])([0-5][0-9])$");
     private static final Pattern pmPattern = Pattern.compile("^(1?[0-2]|[1-9])([0-9][0-9])p$");
 

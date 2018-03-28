@@ -41,8 +41,8 @@ public class TimeParserTest {
 
     @Test
     public void parse003() {
-        assertResult("9:01 AM", "\"9:01 AM\"");
-        assertResult("10:01 AM", "\"10:01 AM\"");
-        assertResult("12:59 AM", "\"12:59 AM\"");
+        assertResult("9:01 AM", "9:01 AM");
+        assertResult("10:01 AM", "10:01 AM");
+        assertResult("12:59 AM", "12:59 AM");
     }
 }
