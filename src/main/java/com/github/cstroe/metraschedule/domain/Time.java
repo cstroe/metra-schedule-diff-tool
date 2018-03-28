@@ -1,5 +1,6 @@
 package com.github.cstroe.metraschedule.domain;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,5 +48,24 @@ public class Time {
         } else {
             return format("%d:%02d PM", hour, minute);
         }
+    }
+
+    public String toStringTimeOnly() {
+        return format("%d:%02d", hour, minute);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Time time = (Time) o;
+        return hour == time.hour &&
+                minute == time.minute &&
+                am == time.am;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(hour, minute, am);
     }
 }

@@ -13,4 +13,12 @@ public class TimeTest {
         assertEquals("11:02 AM", Time.of(11,2,true).toString());
         assertEquals("11:02 PM", Time.of(11,2,false).toString());
     }
+
+    @Test
+    public void equality() {
+        Time t1 = Time.of(1, 2, true);
+        Time t2 = Time.of(1, 2, true);
+        assertTrue(t1.equals(t2));
+        assertTrue(t2.equals(t1));
+    }
 }
