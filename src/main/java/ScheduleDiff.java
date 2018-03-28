@@ -38,9 +38,9 @@ public class ScheduleDiff {
         List<Station> inboundStations = readTrains("bnsf", Direction.INBOUND);
 
         StringBuilder builder = new StringBuilder();
-        builder.append("<html><body><table border=1 cellspacing=0>\n");
-
-
+        builder.append("<html><body>");
+        builder.append(ReadUtil.readWholeFile("src/main/resources/tooltip.html"));
+        builder.append("<table border=1 cellspacing=0>\n");
         builder.append("<tr><td>&nbsp;</td>");
         for(String train : inboundTrains) {
             builder.append("<td>");
@@ -93,8 +93,13 @@ public class ScheduleDiff {
                         builder.append("</td>");
                     } else {
                         builder.append("<td style=\"background-color: yellow;\">");
+                        builder.append("<div class=\"tooltip\">");
                         builder.append(TimeDifference.diff(currentTime, proposedTime));
-                        builder.append("<br/>");
+                        builder.append("<span class=\"tooltiptext\">");
+                        builder.append(currentTime.toString().replaceAll("\\s", "&nbsp;"));
+                        builder.append("&nbsp&rarr;&nbsp;");
+                        builder.append(proposedTime.toString().replaceAll("\\s", "&nbsp;"));
+                        builder.append("</span></div><br/>");
                         builder.append(proposedTime.toStringTimeOnly());
                         builder.append("</td>");
                     }
@@ -120,7 +125,9 @@ public class ScheduleDiff {
         builder.append("<tr><td colspan=\"48\">&nbsp;</td><td style=\"text-align: center;\">");
         builder.append(proposedTotalStops - currentTotalStops);
         builder.append("</td></tr>");
-        builder.append("</table></body></html>\n");
+        builder.append("</table>");
+        builder.append(ReadUtil.readWholeFile("src/main/resources/legend.html"));
+        builder.append("</body></html>\n");
         saveHtmlReport(builder);
     }
 

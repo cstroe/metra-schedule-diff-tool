@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class ReadUtil {
     public static List<String> readFile(String path) throws FileNotFoundException {
@@ -17,6 +18,12 @@ public class ReadUtil {
                 lines.add(line);
             }
         }
+        input.close();
         return lines;
+    }
+
+    public static String readWholeFile(String path) throws FileNotFoundException {
+        List<String> file = readFile(path);
+        return file.stream().collect(Collectors.joining("\n"));
     }
 }
