@@ -8,7 +8,7 @@ Schedule data is stored in the following directory hierarchy: `schedules/<metra 
 
 The data is stored in a CSV file for each train.  The CSV file is named after the train number.
 
-A list of trains is kept in `schedules/<metra line>/inbound-trains.txt` and `schedules/<metra line>/inbound-trains.txt`. 
+A list of trains is kept in `schedules/<metra line>/inbound-trains.txt` and `schedules/<metra line>/outbound-trains.txt`. 
 
 ## Entering a schedule
 
