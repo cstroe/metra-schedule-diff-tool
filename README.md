@@ -1,3 +1,5 @@
+![Creative Commons Attribution-ShareAlike 4.0 International Public License](https://img.shields.io/badge/License-CC--BY--SA-blue.svg)
+
 # Metra Schedule Diff Tool
 
 A tool to compare two Metra schedules.  This comes handy when evaluating a proposed schedule against the current schedule.
