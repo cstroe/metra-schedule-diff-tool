@@ -1,5 +1,6 @@
 import com.github.cstroe.metraschedule.domain.Station;
 import com.github.cstroe.metraschedule.domain.Time;
+import com.github.cstroe.metraschedule.domain.TrainDirection;
 import com.github.cstroe.metraschedule.parser.TimeDifference;
 import com.github.cstroe.metraschedule.parser.TimeParser;
 import com.github.cstroe.metraschedule.util.ReadUtil;
@@ -20,22 +21,13 @@ import static java.lang.String.format;
 public class ScheduleDiff {
     private static final TimeParser parser = new TimeParser();
 
-    private enum Direction {
-        INBOUND, OUTBOUND;
-
-        @Override
-        public String toString() {
-            return super.toString().toLowerCase();
-        }
-    }
-
     public static void main(String[] args) throws IOException {
         String currentSchedule = "2016-10-09";
         String proposedSchedule = "2018-03-proposed-schedule";
 
         List<String> inboundTrains = ReadUtil.readFile("schedules/bnsf/inbound-trains.txt");
 
-        List<Station> inboundStations = readTrains("bnsf", Direction.INBOUND);
+        List<Station> inboundStations = readTrains("bnsf", TrainDirection.INBOUND);
 
         StringBuilder builder = new StringBuilder();
         builder.append("<html><body>");
@@ -131,7 +123,7 @@ public class ScheduleDiff {
         saveHtmlReport(builder);
     }
 
-    private static List<Station> readTrains(String line, Direction direction) throws IOException {
+    private static List<Station> readTrains(String line, TrainDirection direction) throws IOException {
         return CSVFormat.DEFAULT
                 .withHeader("id","station", "zone")
                 .withSkipHeaderRecord()

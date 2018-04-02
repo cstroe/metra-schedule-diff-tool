@@ -1,6 +1,7 @@
 import com.github.cstroe.metraschedule.cli.Input;
 import com.github.cstroe.metraschedule.domain.Station;
 import com.github.cstroe.metraschedule.domain.StationTime;
+import com.github.cstroe.metraschedule.domain.TrainDirection;
 import com.github.cstroe.metraschedule.parser.TimeParser;
 import com.github.cstroe.metraschedule.parser.TimeParserResult;
 import javafx.util.Pair;
@@ -90,10 +91,8 @@ public class TrainEntry {
         }
     }
 
-    private static List<StationTime> getInboundTimes(String line, Integer trainNumber) throws IOException {
-        System.out.println("Reading times for inbound train number " + trainNumber);
-
-        Reader in = new FileReader(format("schedules/%s/bnsf-stations-inbound.csv", line));
+    private static List<Station> readStations(String line, TrainDirection direction) throws IOException {
+        Reader in = new FileReader(format("schedules/%s/bnsf-stations-%s.csv", line, direction.toString()));
         Iterable<CSVRecord> records = CSVFormat.RFC4180
                 .withFirstRecordAsHeader()
                 .parse(in);
@@ -101,7 +100,13 @@ public class TrainEntry {
         for (CSVRecord record : records) {
             stations.add(Station.of(record.get(0), record.get(1)));
         }
+        return stations;
+    }
 
+    private static List<StationTime> getInboundTimes(String line, Integer trainNumber) throws IOException {
+        System.out.println("Reading times for inbound train number " + trainNumber);
+
+        List<Station> stations = readStations(line, TrainDirection.INBOUND);
         LinkedList<StationTime> times = new LinkedList<>();
         StationIterator iterator = new StationIterator(stations);
         StationTime previousStation = null;
