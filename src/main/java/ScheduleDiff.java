@@ -34,7 +34,7 @@ public class ScheduleDiff {
     private static void computeDiff(String line, String currentSchedule, String proposedSchedule, TrainDirection direction) throws IOException {
         List<String> trainNumbers = ReadUtil.readFile(format("schedules/%s/%s-trains.txt", line, direction.name().toLowerCase()));
 
-        List<Station> inboundStations = readStations(line, direction);
+        List<Station> stations = readStations(line, direction);
 
         StringBuilder builder = new StringBuilder();
         builder.append("<html><body>");
@@ -54,7 +54,7 @@ public class ScheduleDiff {
 
         int currentTotalStops = 0;
         int proposedTotalStops = 0;
-        for(Station station : inboundStations) {
+        for(Station station : stations) {
             builder.append("<tr><td>");
             builder.append(station.name.replaceAll("\\s", "&nbsp;"));
             builder.append("</td>");
