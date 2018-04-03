@@ -20,7 +20,7 @@ Currently, entering a schedule is done by running the entrypoint in `TrainEntry`
 
 ## Comparing schedules
 
-Comparing a schedule is done by running the entrypoint in the `ScheduleDiff` class.
+Comparing a schedule is done by running the entrypoint in the `ScheduleDiff` class.  The HTML files for the report are saved to the `target` directory, named `<direction>-diff.html`.
 
 ## Other interesting projects
 
