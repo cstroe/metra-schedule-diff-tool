@@ -4,6 +4,8 @@
 
 A tool to compare two Metra schedules.  This comes handy when evaluating a proposed schedule against the current schedule.
 
+![Schedule comparison](docs/screenshot.png)
+
 ## Schedule data
 
 Schedule data is stored in the following directory hierarchy: `schedules/<metra line>/<schedule effective date>`.  For example, the schedule for the BSNF line, effective October 9th, 2016, is stored in `schedules/bnsf/2016-10-09`.
