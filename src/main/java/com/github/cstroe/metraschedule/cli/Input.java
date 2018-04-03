@@ -5,5 +5,6 @@ public enum Input {
     COMMAND_GOTO_END,
     COMMAND_SKIP,
     COMMAND_UNDO,
+    COMMAND_JUMP,
     ;
 }

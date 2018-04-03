@@ -1,6 +1,7 @@
 import com.github.cstroe.metraschedule.cli.Input;
 import com.github.cstroe.metraschedule.domain.Station;
 import com.github.cstroe.metraschedule.domain.StationTime;
+import com.github.cstroe.metraschedule.domain.Train;
 import com.github.cstroe.metraschedule.domain.TrainDirection;
 import com.github.cstroe.metraschedule.parser.TimeParser;
 import com.github.cstroe.metraschedule.parser.TimeParserResult;
@@ -29,12 +30,16 @@ public class TrainEntry {
             Optional<Integer> trainNumberOpt = readInteger();
             if (trainNumberOpt.isPresent()) {
                 Integer trainNumber = trainNumberOpt.get();
+
+                Train train;
                 if (trainNumber % 2 == 0) {
-                    List<StationTime> times = getInboundTimes(line, trainNumber);
-                    saveTimes(line, schedule, trainNumber, times);
+                    train = new Train(trainNumber, TrainDirection.INBOUND);
                 } else {
-                    getOutboundTimes(trainNumber);
+                    train = new Train(trainNumber, TrainDirection.OUTBOUND);
                 }
+
+                List<StationTime> times = getTrainTimes(line, train);
+                saveTimes(line, schedule, trainNumber, times);
             } else {
                 break;
             }
@@ -77,11 +82,6 @@ public class TrainEntry {
         return Arrays.asList(subDirectories);
     }
 
-    private static List<String> getCurrentSchedules() {
-        //new File()
-        return null;
-    }
-
     private static Optional<Integer> readInteger() {
         String trainNumberRaw = input.next();
         try {
@@ -103,16 +103,16 @@ public class TrainEntry {
         return stations;
     }
 
-    private static List<StationTime> getInboundTimes(String line, Integer trainNumber) throws IOException {
-        System.out.println("Reading times for inbound train number " + trainNumber);
+    private static List<StationTime> getTrainTimes(String line, Train train) throws IOException {
+        System.out.println("Reading times for train " + train);
 
-        List<Station> stations = readStations(line, TrainDirection.INBOUND);
+        List<Station> stations = readStations(line, train.direction);
         LinkedList<StationTime> times = new LinkedList<>();
         StationIterator iterator = new StationIterator(stations);
         StationTime previousStation = null;
         loop: while(iterator.hasNext()) {
             Station currentStation = iterator.next();
-            Pair<Input, StationTime> input = getInput(trainNumber, currentStation, previousStation);
+            Pair<Input, Object> input = getInput(train.number, currentStation, previousStation);
 
             switch(input.getKey()) {
                 case COMMAND_SKIP:
@@ -127,9 +127,14 @@ public class TrainEntry {
                     System.out.println("Undo: " + time);
                     iterator.goBackTo(time.station.id);
                     continue loop;
+                case COMMAND_JUMP:
+                    String newStation = (String) input.getValue();
+                    Station jumpedStation = iterator.jumpTo(newStation);
+                    System.out.println("Jump to: " + jumpedStation);
+                    continue loop;
                 case VALUE:
-                    StationTime currentStationTime = input.getValue();
-                    System.out.print(trainNumber);
+                    StationTime currentStationTime = (StationTime) input.getValue();
+                    System.out.print(train.number);
                     System.out.print(" -> ");
                     System.out.println(currentStationTime);
                     times.add(currentStationTime);
@@ -141,13 +146,17 @@ public class TrainEntry {
         return times;
     }
 
-    private static Pair<Input, StationTime> getInput(int trainNumber, Station station, StationTime previousStation) {
+    private static Pair<Input, Object> getInput(int trainNumber, Station station, StationTime previousStation) {
         System.out.print(trainNumber);
         System.out.print(" -> ");
         System.out.print(station.name);
         System.out.print(": ");
 
         String inputRaw = input.next();
+
+        if(inputRaw == null) {
+            return getInput(trainNumber, station, previousStation);
+        }
 
         if("-".equals(inputRaw)) {
             return new Pair<>(Input.COMMAND_SKIP, null);
@@ -161,6 +170,11 @@ public class TrainEntry {
             return new Pair<>(Input.COMMAND_UNDO, null);
         }
 
+        if(inputRaw.startsWith("=")) {
+            String newStation = inputRaw.substring(1);
+            return new Pair<>(Input.COMMAND_JUMP, newStation);
+        }
+
         TimeParserResult result;
         if(previousStation != null) {
             result = new TimeParser().parse(previousStation.time, inputRaw);
@@ -172,10 +186,6 @@ public class TrainEntry {
         } else {
             return new Pair<>(Input.VALUE, StationTime.of(station, result.getValue()));
         }
-    }
-
-    private static void getOutboundTimes(Integer trainNumber) {
-        System.out.println("Reading times for outbound train number " + trainNumber);
     }
 
     private static void saveTimes(String line, String schedule, int trainNumber, List<StationTime> times) throws IOException {

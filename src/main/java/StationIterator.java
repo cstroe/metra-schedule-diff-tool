@@ -35,4 +35,20 @@ public class StationIterator implements Iterator<Station> {
             currentIndex--;
         }
     }
+
+    public Station jumpTo(String name) {
+        int savedIndex = currentIndex;
+        while(hasNext()) {
+            next();
+            if(stations.get(currentIndex).name.toLowerCase().contains(name.toLowerCase())) {
+                break;
+            }
+        }
+
+        if(!hasNext()) {
+            currentIndex = savedIndex;
+        }
+
+        return stations.get(currentIndex);
+    }
 }
