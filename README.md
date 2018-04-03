@@ -19,3 +19,13 @@ Currently, entering a schedule is done by running the entrypoint in `TrainEntry`
 ## Comparing schedules
 
 Comparing a schedule is done by running the entrypoint in the `ScheduleDiff` class.
+
+## Other interesting projects
+
+* [open-city/metra-service-changes](https://github.com/open-city/metra-service-changes) - a [much cooler visualization](https://c82.net/metra/) than this project, prepared for the Metra Schedule Cuts in 2012.
+* [blakesmith/metra\_schedule](https://github.com/blakesmith/metra_schedule)
+* [pushchris/metra](https://github.com/pushchris/metra)
+* [iandees/metraapi](https://github.com/iandees/metraapi)
+* [jhartwell/ExMetra](https://github.com/jhartwell/ExMetra)
+* [chadn/mct](https://github.com/chadn/mct)
+* [SMASH1337/MetraAPI](https://github.com/SMASH1337/MetraAPI)
