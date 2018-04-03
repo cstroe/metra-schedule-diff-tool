@@ -8,33 +8,42 @@ import javafx.util.Pair;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.QuoteMode;
 
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
 public class ScheduleDiff {
+    private static Scanner input = new Scanner(System.in).useDelimiter("\n");
     private static final TimeParser parser = new TimeParser();
 
     public static void main(String[] args) throws IOException {
-        String currentSchedule = "2016-10-09";
-        String proposedSchedule = "2018-03-proposed-schedule";
+        final String line = "bnsf";
+        final String currentSchedule = "2016-10-09";
+        final String proposedSchedule = "2018-03-proposed-schedule";
 
-        List<String> inboundTrains = ReadUtil.readFile("schedules/bnsf/inbound-trains.txt");
+        for(TrainDirection direction : TrainDirection.values()) {
+            System.out.println(format("Computing diff between '%s' on '%s' on the %s '%s' line.", currentSchedule, proposedSchedule, direction.name().toLowerCase(), line));
+            computeDiff(line, currentSchedule, proposedSchedule, direction);
+        }
+    }
 
-        List<Station> inboundStations = readTrains("bnsf", TrainDirection.INBOUND);
+    private static void computeDiff(String line, String currentSchedule, String proposedSchedule, TrainDirection direction) throws IOException {
+        List<String> trainNumbers = ReadUtil.readFile(format("schedules/%s/%s-trains.txt", line, direction.name().toLowerCase()));
+
+        List<Station> inboundStations = readStations(line, direction);
 
         StringBuilder builder = new StringBuilder();
         builder.append("<html><body>");
+        builder.append(format("<h1>%s line: %s schedule compared with the %s</h1>", line, currentSchedule, proposedSchedule));
+        builder.append(format("<h1>%s train schedule comparison</h1>", direction.name()));
         builder.append(ReadUtil.readWholeFile("src/main/resources/tooltip.html"));
         builder.append("<table border=1 cellspacing=0>\n");
         builder.append("<tr><td>&nbsp;</td>");
-        for(String train : inboundTrains) {
+        for(String train : trainNumbers) {
             builder.append("<td>");
             builder.append(train);
             builder.append("</td>");
@@ -46,15 +55,13 @@ public class ScheduleDiff {
         int currentTotalStops = 0;
         int proposedTotalStops = 0;
         for(Station station : inboundStations) {
-            System.out.println("Printing station: " + station.name);
-
             builder.append("<tr><td>");
             builder.append(station.name.replaceAll("\\s", "&nbsp;"));
             builder.append("</td>");
 
             int currentStationStops = 0;
             int proposedStationStops = 0;
-            for(String train : inboundTrains) {
+            for(String train : trainNumbers) {
                 Map<Station, Time> currentTrainStops = readSchedule(currentSchedule, train);
                 Map<Station, Time> proposedTrainStops = readSchedule(proposedSchedule, train);
                 Time currentTime = currentTrainStops.get(station);
@@ -117,13 +124,13 @@ public class ScheduleDiff {
         builder.append("<tr><td colspan=\"48\">&nbsp;</td><td style=\"text-align: center;\">");
         builder.append(proposedTotalStops - currentTotalStops);
         builder.append("</td></tr>");
-        builder.append("</table>");
+        builder.append("</table><br/>");
         builder.append(ReadUtil.readWholeFile("src/main/resources/legend.html"));
         builder.append("</body></html>\n");
-        saveHtmlReport(builder);
+        saveHtmlReport(builder, direction);
     }
 
-    private static List<Station> readTrains(String line, TrainDirection direction) throws IOException {
+    private static List<Station> readStations(String line, TrainDirection direction) throws IOException {
         return CSVFormat.DEFAULT
                 .withHeader("id","station", "zone")
                 .withSkipHeaderRecord()
@@ -153,13 +160,15 @@ public class ScheduleDiff {
                 }).collect(Collectors.toMap(Pair::getKey, Pair::getValue));
     }
 
-    private static void saveHtmlReport(StringBuilder builder) throws IOException {
-        FileWriter writer = new FileWriter("target/diff.html");
+    private static void saveHtmlReport(StringBuilder builder, TrainDirection direction) throws IOException {
+        final String file = format("target/%s-diff.html", direction.name().toLowerCase());
+        FileWriter writer = new FileWriter(file);
         BufferedWriter bw = new BufferedWriter(writer);
 
         bw.write(builder.toString());
         bw.flush();
         bw.close();
         writer.close();
+        System.out.println(format("Saved %s", file));
     }
 }
