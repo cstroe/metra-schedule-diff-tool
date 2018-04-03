@@ -1,0 +1,85 @@
+<html>
+<body>
+
+<style>
+blockquote { 
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 40px;
+    margin-right: 40px;
+    border-left: 1px gray solid;
+    padding-left: 20px;
+}
+</style>
+
+<h1>Metra Schedule Comparator</h1>
+
+
+<h2>Background</h2>
+
+<p>
+In March of 2018, Metra <a href="https://metrarail.com/about-metra/newsroom/new-safety-system-prompts-revision-bnsf-schedule">announced</a> a <a href="https://metrarail.com/sites/default/files/assets/Schedules/new_bnsf.pdf">proposed schedule</a> for the BNSF line.  This proposed schedule is expected to replace the current schedule at some point in the future, and Metra gave the following explanation:
+</p>
+
+<blockquote cite="https://metrarail.com/sites/default/files/assets/Schedules/new_bnsf.pdf">
+<p>
+ATTENTION BNSF RAILWAY CUSTOMERS
+</p>
+<p>
+Due to the upcoming implementation of the Positive Train Control (PTC) safety system, Metra must make adjustments to the BNSF schedule.  PTC is a federally mandated safety system that will automatically stop a train if the engineer fails to obey a signal or exceeds the speed limit.  PTC increases safety by preventing train-to-train collisions, unauthorized entry into work zones and derailments due to speeding or moving through misaligned track switches.
+</p>
+<p>
+When PTC is fully implemented, it will affect how quickly trains will be able to turn around at downtown stations and send them back out to make more inbound trips.  The ame applies to the evening rush period, as trains complete their trips to the suburbs and turn back to pick up more customers downtown.  Metra calls this process "flipping" a train, and it will take longer because of PTC.
+</p>
+<p>
+This proposed schedule takes into account the longer "flip" times, and it also makes adjustments to address capacity issues.  Details about these proposed changes can be found at metrarail.com.
+</p>
+<p>
+Please review how this schedule would affect your trips and send any comments to BNSFservice2018@metrarr.com.  Metra may revise the proposal based on feedback.
+</p>
+</blockquote>
+<p>
+Metra also offers a <a href="https://metrarail.com/node/5839">Q&amp;A</a> page about this change.
+
+<h2>Comparing the Schedules</h2>
+
+<p>
+In order to properly compare the current schedule with the proposed schedule, I have written a <a href="https://github.com/cstroe/metra-schedule-diff-tool">program</a> to compare the two schedules and produce a tabular report.  The output of the program compares the outbound and inbound schedules separately.  Explanation of the schedule comparison report is given in the legend of each table.
+</p>
+
+<ul>
+<li><a href="inbound-diff.html">Inbound Train Comparison</a></li>
+<li><a href="outbound-diff.html">Outbound Train Comparison</a></li>
+</ul>
+
+<h3>Notes about the report</h3>
+
+<ul>
+<li>Read the legend carefully and spend some time looking at the report.  There's a lot of data condensed in it, and it takes a bit to understand how it's presented.</li>
+<li>All the times for the stops were enterered manually.  As such, please <a href="https://github.com/cstroe/metra-schedule-diff-tool/issues">open an issue</a> to fix any incorrectly entered times.</li>
+<li>Since the table is large, you may want to use your browser's zoom feature to zoom out so that the entire schedule can be seen easier.  Then you can zoom to normal size and use the scroll bars to see exactly how your commute is being impacted.</li>
+</ul>
+
+<h2>Analysis</h2>
+
+<p>
+From the preliminary analysis, it seems that some stops will see inbound trains further apart.  Overall, the line is losing 3 inbound stops across all the trains.
+</p>
+
+<p>
+However, the outbound train stops are getting cut a lot more, overall losing 22 stops.  This is probably because outbound train 1211 is getting completely cut.  Stations further from Chicago seem to be losing more stops than nearer stations.
+</p>
+
+<p>Depending on your stop, you may see your trains getting further apart, since train stops were removed.  For example, the Lisle stop is losing 1 inbound train stop and 3 outbound train stops.  Other stations may see an improvement in service, such as Western Springs that is gaining 2 inbound train stops, and losing 1 outbound train stop.</p>
+
+<h2>Contact</h2>
+
+Please <a href="https://github.com/cstroe/metra-schedule-diff-tool/issues">open an issue on GitHub</a> to reach out with any questions/issues/suggestions.
+
+<h2>Acknowledgements</h2>
+
+I would like to thank my neighbor Dan for making me aware of the schedule change.
+
+</body>
+</html>
